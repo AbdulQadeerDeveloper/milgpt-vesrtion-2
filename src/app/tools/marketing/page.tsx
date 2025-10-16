@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Share2, Mail, Search, Megaphone, FileText, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
-import Grid from "@/components/home/Grid";
 import { Footer } from "@/components/Footer";
 
 // Sections Data
@@ -138,8 +137,6 @@ const MarketingToolsPage = () => {
           ))}
         </div>
       </section>
-
-      <Grid />
       <Footer />
     </>
   );

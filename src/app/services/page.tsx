@@ -1,7 +1,6 @@
 import { Footer } from "@/components/Footer";
 import Challenge from "@/components/home/Challenge";
 import ContactSection from "@/components/home/ContactSection";
-import Grid from "@/components/home/Grid";
 import ScheduleConsultationSection from "@/components/home/ScheduleConsultationSection";
 import ServicesPage from "@/components/home/Services";
 import ServicesHero from "@/components/home/ServicesHero";
@@ -16,7 +15,6 @@ export default function Services() {
       <ScheduleConsultationSection />
       <Challenge />
       <ContactSection />
-      <Grid />
       <Footer />
     </>
   );

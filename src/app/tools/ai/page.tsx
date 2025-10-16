@@ -14,7 +14,6 @@ import {
 
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import Grid from "@/components/home/Grid";
 import Image from "next/image";
 
 const AIToolsPage = () => {
@@ -144,8 +143,6 @@ const AIToolsPage = () => {
             </section>
           ))}
         </div>
-
-        <Grid />
         <Footer />
       </main>
     </>

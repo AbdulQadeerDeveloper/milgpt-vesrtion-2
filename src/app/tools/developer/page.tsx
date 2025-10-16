@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Code2, CloudCog, GitBranch, Rocket, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
-import Grid from "@/components/home/Grid";
 import { Footer } from "@/components/Footer";
 
 const sections = [
@@ -130,8 +129,6 @@ const DeveloperToolsPage = () => {
           ))}
         </div>
       </section>
-
-      <Grid />
       <Footer />
     </>
   );

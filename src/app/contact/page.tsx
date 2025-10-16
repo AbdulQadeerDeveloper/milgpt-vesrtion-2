@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import ContactHero from "@/components/home/ConatactHero";
+
 interface FormData {
   name: string;
   email: string;
@@ -65,7 +65,7 @@ export default function ContactPage() {
   return (
     <>
       <Navbar />
-      <ContactHero />
+
       <section className="relative min-h-screen bg-gradient-to-b from-[#0B1120] via-[#111827] to-[#1F2937] text-white py-20 px-6 md:px-12 lg:px-20">
         {/* Hero Header */}
         <div className="text-center mb-16">

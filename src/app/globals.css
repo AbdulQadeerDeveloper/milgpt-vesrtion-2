@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0d0e10;
+  --foreground: #ffffff; /* set default text color */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0d0e10; /* stays same even in dark mode */
+    --foreground: #ffffff;
+  }
+}
+
+body {
+  background: #0d0e10 !important;
+  color: var(--foreground);
+  font-family: "Geist";
+}
+
+.color-black {
+  color: #000 !important;
+}
+
+.bg-background {
+  background-color: #0d0e10 !important;
+}

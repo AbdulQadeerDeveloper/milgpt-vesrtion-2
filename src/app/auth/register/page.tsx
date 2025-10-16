@@ -27,7 +27,18 @@ export default function RegisterPage() {
     setLoading(true);
     setError("");
 
-    if (form.password !== form.confirmPassword) {
+    const name = form.name.trim();
+    const email = form.email.trim();
+    const password = form.password.trim();
+    const confirmPassword = form.confirmPassword.trim();
+
+    if (!name || !email || !password || !confirmPassword) {
+      setError("All fields are required");
+      setLoading(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
       setError("Passwords do not match");
       setLoading(false);
       return;
@@ -39,11 +50,7 @@ export default function RegisterPage() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: form.name,
-            email: form.email,
-            password: form.password,
-          }),
+          body: JSON.stringify({ name, email, password, confirmPassword }),
         }
       );
 
@@ -53,7 +60,7 @@ export default function RegisterPage() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      router.push("/milgpt");
+      router.push("/auth/login");
     } catch (err: unknown) {
       setError(
         err instanceof Error ? err.message : "Something went wrong. Try again."
@@ -63,6 +70,10 @@ export default function RegisterPage() {
     }
   };
 
+  const passwordsMatch =
+    form.password.trim() === form.confirmPassword.trim() ||
+    !form.confirmPassword;
+
   return (
     <div className="min-h-screen flex items-center justify-center py-20 bg-gradient-to-br from-[#0b0b0b] via-[#101010] to-[#1a1a1a] relative overflow-hidden">
       {/* Decorative floating blobs */}
@@ -71,7 +82,9 @@ export default function RegisterPage() {
 
       {/* Register Card */}
       <div className="relative z-10 w-full max-w-md bg-[#111]/80 backdrop-blur-xl border border-[#333] rounded-2xl p-10 shadow-[0_0_30px_rgba(107,148,106,0.3)]">
-        <h1 className="text-3xl font-bold text-white mb-2 text-center">Register</h1>
+        <h1 className="text-3xl font-bold text-white mb-2 text-center">
+          Register
+        </h1>
         <p className="text-gray-400 mb-6 text-sm text-center">
           Start generating your thoughts with{" "}
           <span className="text-[#DCD194] font-semibold">MilGPT</span>
@@ -128,7 +141,9 @@ export default function RegisterPage() {
               placeholder="Confirm Password"
               value={form.confirmPassword}
               onChange={handleChange}
-              className="w-full px-4 py-3 pr-10 rounded-lg bg-transparent border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#DCD194] text-white placeholder-gray-400"
+              className={`w-full px-4 py-3 pr-10 rounded-lg bg-transparent border ${
+                passwordsMatch ? "border-gray-600" : "border-red-500"
+              } focus:outline-none focus:ring-2 focus:ring-[#DCD194] text-white placeholder-gray-400`}
               required
             />
             <button
@@ -140,10 +155,15 @@ export default function RegisterPage() {
             </button>
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <p className="text-red-400 text-sm text-center">{error}</p>
+          {/* Password Mismatch Hint */}
+          {!passwordsMatch && (
+            <p className="text-red-400 text-xs text-center">
+              Passwords do not match
+            </p>
           )}
+
+          {/* Error Message */}
+          {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
           {/* Submit Button */}
           <button

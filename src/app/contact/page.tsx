@@ -1,14 +1,71 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import ContactHero from "@/components/home/ConatactHero";
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+}
 
 export default function ContactPage() {
+  const [form, setForm] = useState<FormData>({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+
+  // ✅ Typed event for input changes
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  // ✅ Typed event for form submit
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/contact`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setSuccess("Message sent successfully!");
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        setError(data.message || "Failed to send message");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Navbar />
+      <ContactHero />
       <section className="relative min-h-screen bg-gradient-to-b from-[#0B1120] via-[#111827] to-[#1F2937] text-white py-20 px-6 md:px-12 lg:px-20">
         {/* Hero Header */}
         <div className="text-center mb-16">
@@ -39,12 +96,17 @@ export default function ContactPage() {
             <h2 className="text-2xl font-semibold mb-6 text-[#4ADE80]">
               Send us a Message
             </h2>
-            <form className="space-y-5">
+
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="block text-gray-300 mb-2">Full Name</label>
                 <input
+                  name="name"
                   type="text"
+                  value={form.name}
+                  onChange={handleChange}
                   placeholder="John Doe"
+                  required
                   className="w-full px-4 py-3 rounded-lg bg-[#1C1C1C] text-white border border-[#333] focus:border-[#4ADE80] outline-none transition-all"
                 />
               </div>
@@ -52,8 +114,12 @@ export default function ContactPage() {
               <div>
                 <label className="block text-gray-300 mb-2">Email</label>
                 <input
+                  name="email"
                   type="email"
+                  value={form.email}
+                  onChange={handleChange}
                   placeholder="you@example.com"
+                  required
                   className="w-full px-4 py-3 rounded-lg bg-[#1C1C1C] text-white border border-[#333] focus:border-[#4ADE80] outline-none transition-all"
                 />
               </div>
@@ -61,20 +127,39 @@ export default function ContactPage() {
               <div>
                 <label className="block text-gray-300 mb-2">Message</label>
                 <textarea
+                  name="message"
                   rows={5}
+                  value={form.message}
+                  onChange={handleChange}
                   placeholder="Write your message..."
+                  required
                   className="w-full px-4 py-3 rounded-lg bg-[#1C1C1C] text-white border border-[#333] focus:border-[#4ADE80] outline-none transition-all"
                 ></textarea>
               </div>
+
+              {/* Alerts */}
+              {success && (
+                <p className="text-green-400 font-medium text-sm">{success}</p>
+              )}
+              {error && (
+                <p className="text-red-400 font-medium text-sm">{error}</p>
+              )}
 
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#4ADE80] to-[#60A5FA] text-black font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-[#4ADE80]/30 transition-all"
+                disabled={loading}
+                className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#4ADE80] to-[#60A5FA] text-black font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-[#4ADE80]/30 transition-all disabled:opacity-70"
               >
-                <Send className="w-5 h-5" />
-                Send Message
+                {loading ? (
+                  "Sending..."
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    Send Message
+                  </>
+                )}
               </motion.button>
             </form>
           </motion.div>

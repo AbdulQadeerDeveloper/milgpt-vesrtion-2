@@ -176,9 +176,9 @@ export default function Sidebar({
               </button>
               <button
                 onClick={() => handleDeleteChat(chat._id)}
-                className="p-2 hover:bg-red-700 rounded-md transition"
+                className="p-2 hover:bg-black rounded-md transition"
               >
-                <Trash2 size={16} className="text-red-400 hover:text-red-600" />
+                <Trash2 size={16} className="text-white hover:text-black" />
               </button>
             </div>
           ))
